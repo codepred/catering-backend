@@ -3,6 +3,9 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 
+const cors = require('cors');
+
+
 const EmployeeRoute = require('./routes/employee')
 const router = require('./routes/employee')
 
@@ -28,5 +31,7 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
     console.log('app runing on port 3000')
 })
+
+app.use(cors())
 
 app.use('/api/employee', EmployeeRoute)

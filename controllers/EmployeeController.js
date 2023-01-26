@@ -2,19 +2,31 @@ const { response } = require('express')
 const Employee = require('../models/Employee')
 
 
+
 // list 
-const index = (req, res, next) => {
-    Employee.find()
-    .then(response => {
-        res.json({
-            response
-        })
-    })
-    .catch(error => {
-        res.json({
-            message: 'ERROR LIST'
-        })
-    })
+// const index = (req, res, next) => {
+//     Employee.find()
+//     .then(response => {
+//         res.json({
+//             response
+//         })
+//     })
+//     .catch(error => {
+//         res.json({
+//             message: 'ERROR LIST'
+//         })
+//     })
+// }
+
+
+const index = (req, res) => {
+    Employee.find((error, data) => {
+        if (error) {
+          return next(error)
+        } else {
+          res.json(data)
+        }
+      })
 }
 
 const show = (req, res, next) => {
@@ -37,7 +49,7 @@ const store = (req,res,next) => {
         name: req.body.name,
         designation: req.body.designation,
         email: req.body.email,
-        phone: req.body.age
+        amount: 1
     })
     employee.save()
     .then(response => {
@@ -53,13 +65,19 @@ const store = (req,res,next) => {
 }
 
 const update = (req, res, next) => {
-    let employeeID = req.body.employeeID
+    let employeeID = req.body.id
 
+    if(req.body.action === 'plus'){
+        req.body.amount = req.body.amount +1;
+    }
+
+    if(req.body.action === 'minus'){
+        req.body.amount = req.body.amount -1;
+    }
+    console.log(req.body.amount)
+    console.log(employeeID)
     let updateData = {
-        name: req.body.name,
-        designation: req.body.designation,
-        email: req.body.email,
-        phone: req.body.age
+        amount: req.body.amount
     }
 
     Employee.findByIdAndUpdate(employeeID, {$set: updateData})
@@ -74,6 +92,7 @@ const update = (req, res, next) => {
         })
     })
 }
+
 
 // delete
 const destroy = (req, res, next) => {
@@ -91,8 +110,22 @@ const destroy = (req, res, next) => {
     })
 }
 
+const destroyAll = (req, res, next) => {
+    Employee.remove()
+    .then(() => {
+        req.json({
+            message : 'Deleted'
+        })
+    })
+    .catch(error => {
+        res.json({
+            message: 'an error occured'
+        })
+    })
+}
+
 module.exports ={
-    index, show, store, update, destroy
+    index, show, store, update, destroy, destroyAll
 }
 
 

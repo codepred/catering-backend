@@ -14,8 +14,8 @@ const employeeSchema = new Schema({
     email: {
         type: String
     },
-    age: {
-        type: String
+    amount: {
+        type: Number
     }
 }, {timestamps: true})
 

@@ -13,5 +13,6 @@ router.post('/show', EmployeeController.show)
 router.post('/store', EmployeeController.store)
 router.post('/delete', EmployeeController.destroy)
 router.post('/update', EmployeeController.update)
+router.post('/deleteAll', EmployeeController.destroyAll)
 
 module.exports = router
